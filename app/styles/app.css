@@ -1,0 +1,43 @@
+table {
+    width: 25%;
+}
+td {
+    text-align: center;
+}
+.pagination {
+    margin-top: 20px;
+    margin-right: 40px;
+}
+.pagination li {
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+}
+.pagination a {
+    color: blue;
+    text-transform: uppercase;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.pagination li.active {
+    border: solid 1px blue;
+    background-color: white;
+}
+.pagination li.active a {
+    text-decoration: none;
+}
+.pagination a:hover {
+    background-color: blue;
+    color: white;
+}
+
+.pagination li.disabled a {
+    color: gray;
+    text-decoration: none;
+}
+
+.pagination li.pages ul li {
+    display: inline-block;
+    float: none;
+}

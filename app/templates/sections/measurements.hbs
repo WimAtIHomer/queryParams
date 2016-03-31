@@ -1,0 +1,30 @@
+{{model.section.name}}
+<table>
+    <thead>
+    <tr>
+        <th>value</th>
+        <th>timestamp</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each measurements as |measurement|}}
+        <tr>
+            <td>{{measurement.value}}</td>
+            <td>{{measurement.timestamp}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+{{table-pagination
+pages=pages
+currentPage=currentPage
+isFirstPage=isFirstPage
+isLastPage=isLastPage
+meta=meta
+selectedPage=page
+onFirstPageClicked=(action 'goToPage' 1)
+onLastPageClicked=(action 'goToPage' meta.totalPages)
+onPreviousPageClicked=(action 'previousPage')
+onNextPageClicked=(action 'nextPage')
+onGoToPageClicked=(action 'goToSelectedPage')
+}}

@@ -1,0 +1,16 @@
+<h2 id="title">QueryParams RefreshModel Issue</h2>
+
+<p>
+    This project has 2 routes
+    <ul>
+        <li>sections</li>
+        <li>sections/measurements</li>
+    </ul>
+    Both routes have a table with data and pagination controls and work basically the same.<br/>
+    After changing to the next page the query params of the route are updated and so is the data.<br/>
+    When pushing the back button in the browser the query params are updated but only on the measurements route the data is refreshed.
+</p>
+<p>
+    This is the issue described in <a href="https://github.com/emberjs/ember.js/issues/13150">QueryParams refreshModel does not work on route without dynamic segments</a>
+</p>
+{{outlet}}

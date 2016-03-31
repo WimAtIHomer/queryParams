@@ -1,0 +1,30 @@
+<table>
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each model as |section|}}
+        <tr>
+            <td>{{section.name}}</td>
+            <td>{{section.description}}</td>
+            <td>{{#link-to "sections.measurements" section.id}}measurements{{/link-to}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{table-pagination
+pages=pages
+currentPage=currentPage
+isFirstPage=isFirstPage
+isLastPage=isLastPage
+meta=meta
+selectedPage=page
+onFirstPageClicked=(action 'goToPage' 1)
+onLastPageClicked=(action 'goToPage' meta.totalPages)
+onPreviousPageClicked=(action 'previousPage')
+onNextPageClicked=(action 'nextPage')
+onGoToPageClicked=(action 'goToSelectedPage')
+}}
