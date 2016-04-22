@@ -5,5 +5,4 @@ import Ember from 'ember';
 import PaginationMixin from 'query-params/mixins/pagination';
 
 export default Ember.Controller.extend(PaginationMixin, {
-  modelType: 'section'
 });

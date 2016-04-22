@@ -2,24 +2,7 @@ import Ember from 'ember';
 
 var PaginationMixin = Ember.Mixin.create({
   queryParams: ['page', 'sort', 'direction'],
-  listProperty: "model",
   page: 1,
-  listQuery: Ember.computed('page', 'sort', 'direction', 'query', function() {
-    var listQuery = {};
-    if (this.get('page') > 0) {
-      listQuery.page = this.get('page') - 1;
-    }
-    if (this.get('sort')) {
-      listQuery.sort = this.get('sort');
-    }
-    if (this.get('direction')) {
-      listQuery.direction = this.get('direction');
-    }
-    if (this.get('query')) {
-      return $.extend(listQuery, this.get('query'));
-    }
-    return listQuery;
-  }),
   actions: {
     nextPage: function () {
       if (!this.get('isLastPage')) {
@@ -32,17 +15,8 @@ var PaginationMixin = Ember.Mixin.create({
       }
     },
     sortColumn: function (column, direction) {
-      var self = this;
-      var modelType = this.get('modelType');
-      var listProperty = this.get('listProperty');
       this.set('sort', column);
       this.set('direction', direction);
-      var query = this.get('listQuery');
-
-      this.get('store').query(modelType, query).then(function (model) {
-        self.set(listProperty, model);
-        self.set('meta', Ember.copy(model.get("meta")));
-      });
     },
     goToPage: function(page){
       this.goToPage(page);
@@ -52,16 +26,7 @@ var PaginationMixin = Ember.Mixin.create({
     }
   },
   goToPage: function (pageNumber) {
-    var self = this;
-    var modelType = this.get('modelType');
-    var listProperty = this.get('listProperty');
     this.set('page', pageNumber);
-    var query = this.get('listQuery');
-
-    this.get('store').query(modelType, query).then(function (model) {
-      self.set(listProperty, model);
-      self.set('meta', Ember.copy(model.get("meta")));
-    });
   },
   currentPage: function () {
     if (typeof this.get('meta') !== 'undefined') {

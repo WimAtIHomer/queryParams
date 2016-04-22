@@ -6,33 +6,34 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   queryParams: {
     page: {
-      refreshModel: true
+      refreshModel: true,
+      default: 1
     },
     sort: {
-      refreshModel: true
+      refreshModel: true,
+      default: "id"
     },
     direction: {
-      refreshModel: true
+      refreshModel: true,
+      default: "DESC"
     }
   },
-  setupController: function (controller) {
-    var query = controller.get('listQuery');
-    if (typeof(query.page) === 'undefined') {
+  model: function(params) {
+    var query = $.extend({}, params);
+    query.page = query.page - 1;
+    return this.get('store').query('section', query);
+  },
+  setupController: function (controller, model) {
+    controller.set('model', model);
+    controller.set('meta', model.get('meta'));
+  },
+  resetController: function(controller, isExiting, transition){
+    if (isExiting) {
+      controller.set('model', null);
+      controller.set('meta', undefined);
       controller.set('page', 1);
-      controller.set('sort', 'id');
-      controller.set('direction', 'DESC');
-      query = controller.get('listQuery');
-    }
-    this.get('store').query('section', query).then(function (model) {
-      controller.set('model', model);
-      controller.set('meta', model.get('meta'));
-    });
-  },
-  actions: {
-    willTransition: function(transition){
-      if (this.routeName !== transition.targetName) {
-        this.controller.set('page', -1);
-      }
+      controller.set('sort', undefined);
+      controller.set('direction', undefined);
     }
   }
 });

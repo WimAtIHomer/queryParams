@@ -6,41 +6,37 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   queryParams: {
     page: {
-      refreshModel: true
+      refreshModel: true,
+      default: 1
     },
     sort: {
-      refreshModel: true
+      refreshModel: true,
+      default: "id"
     },
     direction: {
-      refreshModel: true
+      refreshModel: true,
+      default: "DESC"
     }
   },
   model: function(params) {
-    this.set('sectionId', params.sectionId);
+    var query = $.extend({}, params);
+    query.page = query.page - 1;
     return Ember.RSVP.hash({
-      section: this.get('store').find('section', params.sectionId)
+      section: this.get('store').find('section', params.sectionId),
+      measurements: this.get('store').query('measurement', query)
     });
   },
   setupController: function (controller, model) {
     controller.set('model', model);
-    var query = controller.get('listQuery');
-    if (typeof(query.page) === 'undefined' || this.get("sectionId") !== query.sectionId) {
-      controller.set('query', {sectionId: this.get("sectionId")});
-      controller.set('page', 1);
-      query = controller.get('listQuery');
-    }
-    this.get('store').query('measurement', query).then(function (model) {
-      controller.set('measurements', model);
-      controller.set('meta', model.get('meta'));
-    });
+    controller.set('meta', model.measurements.get('meta'));
   },
-  actions: {
-    willTransition: function(transition){
-      if (this.routeName !== transition.targetName) {
-        this.controller.set('page', -1);
-        this.controller.set('measurements', null);
-        this.controller.set('meta', undefined);
-      }
+  resetController: function(controller, isExiting, transition){
+    if (isExiting) {
+      controller.set('model', null);
+      controller.set('meta', undefined);
+      controller.set('page', 1);
+      controller.set('sort', undefined);
+      controller.set('direction', undefined);
     }
   }
 });
